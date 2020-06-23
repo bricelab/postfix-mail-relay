@@ -39,6 +39,8 @@ if [ "$RELAY_HOST" ]; then
   postconf -e relayhost="[$RELAY_HOST]"
 fi
 
+
+
 # We have to start and stop postfix first through init.d to populate
 # postfix spool directory for chroot in which postfix is running.
 # We do it a bit differently in alpine as the init.d scripts use
