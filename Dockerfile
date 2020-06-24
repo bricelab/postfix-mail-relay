@@ -62,7 +62,7 @@ RUN \
  # where to find sasl_passwd
  postconf -e smtp_sasl_password_maps="hash:/etc/postfix/sasl_passwd" && \
  # Enable STARTTLS encryption
- postconf -e smtp_use_tls="yes" && \
+ #postconf -e smtp_use_tls="yes" && \
 # where to find CA certificates
  postconf -e smtp_tls_CAfile="/etc/ssl/certs/ca-certificates.crt"
 
