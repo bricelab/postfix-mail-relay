@@ -5,7 +5,20 @@
 
 if [ "$MAILNAME" ]; then
   echo "$MAILNAME" > /etc/mailname
+
+  #Configure postfix
+  postconf -e 'smtpd_tls_auth_only = no'
+  postconf -e 'smtp_use_tls = yes'
+  postconf -e 'smtpd_use_tls = yes'
+  postconf -e 'smtp_tls_note_starttls_offer = yes'
+  postconf -e "smtpd_tls_key_file = /etc/letsencrypt/${MAILNAME}/privkey.pem"
+  postconf -e "smtpd_tls_cert_file = /etc/letsencrypt/${MAILNAME}/fullchain.pem"
+  postconf -e 'smtpd_tls_loglevel = 1'
+  postconf -e 'smtpd_tls_received_header = yes'
+  postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
+  postconf -e 'tls_random_source = dev:/dev/urandom'
   postconf -e myhostname="$MAILNAME"
+
 fi
 
 if [ "$MY_NETWORKS" ]; then
@@ -29,8 +42,8 @@ if [ "$RELAY_HOST" ]; then
     RELAY="${RELAY}:$PORT"
   fi
 
-  if [ "$USERNAME" && "$PASSWORD" ]; then
-    echo "${RELAY} ${USERNAME}:${PASSWORD}" > /etc/postfix/sasl_passwd    
+  if [ "$USERNAME" ] && [ "$PASSWORD" ]; then
+    RELAY="${RELAY} ${USERNAME}:${PASSWORD}" > /etc/postfix/sasl_passwd    
   fi  
   
   echo "$RELAY" > /etc/postfix/sasl_passwd
@@ -38,8 +51,6 @@ if [ "$RELAY_HOST" ]; then
   chmod 0600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
   postconf -e relayhost="[$RELAY_HOST]"
 fi
-
-
 
 # We have to start and stop postfix first through init.d to populate
 # postfix spool directory for chroot in which postfix is running.
