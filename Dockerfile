@@ -9,8 +9,8 @@ ENV MAILNAME mail.example.com
 ENV MY_NETWORKS 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 127.0.0.0/8
 ENV MY_DESTINATION localhost.localdomain, localhost
 ENV ROOT_ALIAS admin@example.com
-ENV USERNAME usernanme
-ENV PASSWORD password
+#ENV USERNAME usernanme
+#ENV PASSWORD password
 
 ENV DEBIAN_FRONTEND noninteractive
 

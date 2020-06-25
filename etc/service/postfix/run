@@ -49,7 +49,12 @@ if [ "$RELAY_HOST" ]; then
   echo "$RELAY" > /etc/postfix/sasl_passwd
   postmap /etc/postfix/sasl_passwd
   chmod 0600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
-  postconf -e relayhost="[$RELAY_HOST]"
+  if [ "$PORT" ]; then
+    postconf -e relayhost="[$RELAY_HOST]:${PORT}"
+  else
+    postconf -e relayhost="[$RELAY_HOST]"
+  fi
+
 fi
 
 # We have to start and stop postfix first through init.d to populate
